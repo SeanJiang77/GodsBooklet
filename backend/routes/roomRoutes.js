@@ -1,27 +1,40 @@
 import express from "express";
-import Room from "../models/room.js";
+import Room from "../models/Room.js";
+import Player from "../models/Player.js";
 
 const router = express.Router();
 
 // 创建房间
 router.post("/", async (req, res) => {
   try {
-    const room = new Room(req.body);
-    await room.save();
-    res.status(201).json(room);
+    const { name, players } = req.body;
+
+    // 创建并保存所有玩家
+    const savedPlayers = await Player.insertMany(players);
+
+    // 创建房间，关联玩家
+    const newRoom = new Room({
+      name,
+      players: savedPlayers.map((p) => p._id),
+      status: "waiting",
+    });
+
+    const savedRoom = await newRoom.save();
+    res.status(201).json(savedRoom);
   } catch (err) {
-    res.status(500).json({ message: "房间创建失败", error: err.message });
+    console.error("创建房间失败:", err);
+    res.status(500).json({ error: "创建房间失败" });
   }
 });
 
-// 获取房间（可选）
-router.get("/:id", async (req, res) => {
+// 获取所有房间（带玩家信息）
+router.get("/", async (req, res) => {
   try {
-    const room = await Room.findById(req.params.id);
-    if (!room) return res.status(404).json({ message: "房间未找到" });
-    res.json(room);
+    const rooms = await Room.find().populate("players");
+    res.json(rooms);
   } catch (err) {
-    res.status(500).json({ message: "获取失败", error: err.message });
+    console.error("获取房间失败:", err);
+    res.status(500).json({ error: "获取房间失败" });
   }
 });
 
