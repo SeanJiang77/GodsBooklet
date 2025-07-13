@@ -7,22 +7,11 @@ const router = express.Router();
 // 创建房间
 router.post("/", async (req, res) => {
   try {
-    const { name, players } = req.body;
-
-    // 创建并保存所有玩家
-    const savedPlayers = await Player.insertMany(players);
-
-    // 创建房间，关联玩家
-    const newRoom = new Room({
-      name,
-      players: savedPlayers.map((p) => p._id),
-      status: "waiting",
-    });
-
-    const savedRoom = await newRoom.save();
-    res.status(201).json(savedRoom);
+    const newRoom = new Room(req.body);
+    await newRoom.save();
+    res.status(201).json(newRoom);
   } catch (err) {
-    console.error("创建房间失败:", err);
+    console.error("创建房间失败：", err);
     res.status(500).json({ error: "创建房间失败" });
   }
 });
