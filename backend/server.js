@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json());
 
 mongoose
-  .connect("mongodb://localhost:27017/godsbooklet")
+  .connect("mongodb+srv://seanjiang2005:Lihailezzm-2004@godsbooklet.rx0tms1.mongodb.net/")
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log("DB连接失败", err));
 
