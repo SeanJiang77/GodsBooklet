@@ -1,70 +1,93 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function CreateRoomPage() {
   const [roomName, setRoomName] = useState("");
-  const [playerCount, setPlayerCount] = useState(8);
+  const [playerCount, setPlayerCount] = useState(12);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const defaultRoles = {
+    狼人: 3,
+    狼王: 1,
+    预言家: 1,
+    女巫: 1,
+    猎人: 1,
+    守卫: 1,
+    村民: 4,
+  };
+
+  const defaultRules = {
+    hasSheriff: true,
+    sheriffBonus: true,
+    witchDoubleNightUse: false,
+    witchSelfSaveFirstNight: true,
+    guardRepeat: false,
+    hunterRevenge: true,
+    idiotSpeakVote: false,
+    loverEnabled: false,
+  };
+
+  const nightOrder = ["守卫", "狼人", "预言家", "女巫"];
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!roomName || playerCount < 5 || playerCount > 20) {
-      alert("请输入有效的房间名和 5~20 位玩家人数");
-      return;
-    }
+    try {
+      const res = await axios.post("http://localhost:3001/api/rooms", {
+        roomName,
+        playerCount,
+        roles: defaultRoles,
+        rules: defaultRules,
+        nightOrder,
+      });
 
-    // 可以用 navigate 传数据到下一页，比如加 query param 或状态管理
-    navigate("/players", {
-      state: { roomName, playerCount },
-    });
+      const roomId = res.data._id;
+      // 你可以存 roomId 然后跳转
+      navigate("/players", { state: { roomId, roomName, playerCount } });
+    } catch (err) {
+      alert("房间创建失败：" + err.message);
+    }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-yellow-100">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white shadow-md rounded-xl px-8 pt-6 pb-8 w-full max-w-md"
-      >
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-          创建游戏房间
-        </h2>
+    <div className="min-h-screen bg-gray-100 py-10 px-4">
+      <div className="max-w-xl mx-auto bg-white rounded-xl shadow p-8">
+        <h2 className="text-2xl font-bold mb-6">创建房间</h2>
 
-        <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2">
-            房间名
-          </label>
-          <input
-            type="text"
-            value={roomName}
-            onChange={(e) => setRoomName(e.target.value)}
-            className="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
-            placeholder="例如：周五晚局"
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block mb-1 font-semibold">房间名称</label>
+            <input
+              type="text"
+              className="w-full border rounded px-3 py-2"
+              value={roomName}
+              onChange={(e) => setRoomName(e.target.value)}
+              required
+            />
+          </div>
 
-        <div className="mb-6">
-          <label className="block text-gray-700 font-semibold mb-2">
-            玩家人数
-          </label>
-          <input
-            type="number"
-            min="5"
-            max="20"
-            value={playerCount}
-            onChange={(e) => setPlayerCount(parseInt(e.target.value))}
-            className="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
-            placeholder="例如：12"
-          />
-        </div>
+          <div>
+            <label className="block mb-1 font-semibold">玩家人数</label>
+            <input
+              type="number"
+              min="6"
+              max="18"
+              className="w-full border rounded px-3 py-2"
+              value={playerCount}
+              onChange={(e) => setPlayerCount(Number(e.target.value))}
+              required
+            />
+          </div>
 
-        <button
-          type="submit"
-          className="w-full bg-indigo-600 text-white py-2 rounded-xl hover:bg-indigo-700 font-bold transition"
-        >
-          下一步
-        </button>
-      </form>
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          >
+            使用基础配置，创建房间
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

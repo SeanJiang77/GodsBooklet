@@ -1,8 +1,11 @@
 import mongoose from "mongoose";
 
 const roomSchema = new mongoose.Schema({
-  name: String,
-  players: [{ type: mongoose.Schema.Types.ObjectId, ref: "Player" }],
+  roomName: String,
+  playerCount: Number,
+  roles: Object,
+  rules: Object,
+  nightOrder: [String],
   status: {
     type: String,
     enum: ["waiting", "in-game", "ended"],
