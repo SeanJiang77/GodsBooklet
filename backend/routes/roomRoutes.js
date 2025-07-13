@@ -6,11 +6,12 @@ const router = express.Router();
 // 创建房间
 router.post("/", async (req, res) => {
   try {
-    const room = new Room(req.body);
-    await room.save();
-    res.status(201).json(room);
+    const newRoom = new Room(req.body);
+    await newRoom.save();
+    res.status(201).json(newRoom);
   } catch (err) {
-    res.status(500).json({ message: "房间创建失败", error: err.message });
+    console.error("创建房间失败：", err);
+    res.status(500).json({ error: "创建房间失败" });
   }
 });
 

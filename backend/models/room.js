@@ -6,11 +6,7 @@ const roomSchema = new mongoose.Schema({
   roles: Object,
   rules: Object,
   nightOrder: [String],
-  status: {
-    type: String,
-    enum: ["waiting", "in-game", "ended"],
-    default: "waiting",
-  },
+  status: { type: String, default: "waiting" },
 });
 
 export default mongoose.model("Room", roomSchema);
