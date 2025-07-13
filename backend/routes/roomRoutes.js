@@ -6,6 +6,11 @@ const router = express.Router();
 // 创建房间
 router.post("/", async (req, res) => {
   try {
+    const { playerCount, roles } = req.body;
+    const totalRoles = Object.values(roles || {}).reduce((sum, num) => sum + Number(num), 0);
+    if (playerCount < totalRoles) {
+      return res.status(400).json({ error: `玩家数量不足，至少需要 ${totalRoles} 名玩家来匹配所有身份` });
+    }
     const newRoom = new Room(req.body);
     await newRoom.save();
     res.status(201).json(newRoom);
