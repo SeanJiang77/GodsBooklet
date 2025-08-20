@@ -9,6 +9,7 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "dotenv": "^17.2.1",
     "express": "^4.19.2",
     "mongoose": "^8.5.3"
   },
