@@ -1,26 +1,47 @@
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import RoomCreate from "./pages/RoomCreate.jsx";
+import PlayerSetup from "./pages/PlayerSetup.jsx";
+import RoleAssign from "./pages/RoleAssign.jsx";
+import GMPanel from "./pages/GMPanel.jsx";
+import LogPanel from "./pages/LogPanel.jsx";
+import useRoomStore from "./store/roomStore.js";
 
-function App() {
-  const navigate = useNavigate();
+export default function App() {
+  const [tab, setTab] = useState("create");
+  const { room } = useRoomStore();
 
-  console.log("App loaded");
+  const tabs = [
+    { key: "create", label: "创建房间" },
+    { key: "players", label: "玩家设置", disabled: !room?._id },
+    { key: "assign", label: "角色分配", disabled: !room?._id },
+    { key: "gm", label: "主持面板", disabled: !room?._id },
+    { key: "log", label: "日志/撤销", disabled: !room?._id },
+  ];
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-indigo-100 to-purple-200">
-      <h1 className="text-4xl font-extrabold text-indigo-700 mb-4">
-        狼人杀主持助手
-      </h1>
-      <p className="text-gray-600 text-lg mb-6">
-        让每一位玩家轻松上手成为“上帝”
-      </p>
-      <button
-        onClick={() => navigate("/create")}
-        className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-xl font-semibold rounded-xl transition"
-      >
-        创建房间
-      </button>
+    <div className="max-w-5xl mx-auto p-4 space-y-4">
+      <header className="flex items-center justify-between">
+        <h1 className="text-2xl font-semibold">GodsBooklet — 主持人面板</h1>
+        <div className="text-sm text-gray-500">{room?._id ? `房间ID：${room._id}` : "未创建房间"}</div>
+      </header>
+
+      <nav className="flex gap-2 flex-wrap">
+        {tabs.map((t) => (
+          <button
+            key={t.key}
+            className={`btn ${tab === t.key ? "btn-primary" : "btn-secondary"} ${t.disabled ? "opacity-50 cursor-not-allowed" : ""}`}
+            onClick={() => !t.disabled && setTab(t.key)}
+          >
+            {t.label}
+          </button>
+        ))}
+      </nav>
+
+      {tab === "create" && <RoomCreate onNext={() => setTab("players")} />}
+      {tab === "players" && <PlayerSetup onNext={() => setTab("assign")} />}
+      {tab === "assign" && <RoleAssign onNext={() => setTab("gm")} />}
+      {tab === "gm" && <GMPanel onNext={() => setTab("log")} />}
+      {tab === "log" && <LogPanel />}
     </div>
   );
 }
-
-export default App;
