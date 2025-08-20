@@ -1,12 +1,10 @@
-// models/room.js
-// Schema for Room, Player, Rules, Event. ES Modules + Mongoose.
 import mongoose from "mongoose";
 
 const PlayerSchema = new mongoose.Schema(
   {
     seat: { type: Number, required: true, min: 1 },
     nickname: { type: String, required: true, trim: true },
-    role: { type: String, default: null }, // e.g., 'werewolf', 'seer', 'witch', 'guard', 'villager'
+    role: { type: String, default: null },
     alive: { type: Boolean, default: true },
   },
   { _id: false }
@@ -14,10 +12,10 @@ const PlayerSchema = new mongoose.Schema(
 
 const RulesSchema = new mongoose.Schema(
   {
-    witchSelfSaveFirstNight: { type: Boolean, default: true }, // 女巫首夜自救
-    guardConsecutiveProtectAllowed: { type: Boolean, default: false }, // 守卫连守
-    sheriffEnabled: { type: Boolean, default: false }, // 警长流程可选
-    language: { type: String, enum: ["zh", "en"], default: "zh" }, // 多语言 UI
+    witchSelfSaveFirstNight: { type: Boolean, default: true },
+    guardConsecutiveProtectAllowed: { type: Boolean, default: false },
+    sheriffEnabled: { type: Boolean, default: false },
+    language: { type: String, enum: ["zh", "en"], default: "zh" },
   },
   { _id: false }
 );
@@ -25,12 +23,12 @@ const RulesSchema = new mongoose.Schema(
 const EventSchema = new mongoose.Schema(
   {
     at: { type: Date, default: Date.now },
-    phase: { type: String, enum: ["night", "day", "vote", "end"], required: true },
-    actor: { type: String, default: null }, // e.g., 'guard', 'werewolves', 'seer', 'witch', 'system'
+    phase: { type: String, enum: ["init", "night", "day", "vote", "end"], required: true },
+    actor: { type: String, default: null },
     targetSeat: { type: Number, default: null },
     payload: { type: Object, default: {} },
     note: { type: String, default: "" },
-    undoOf: { type: mongoose.Schema.Types.ObjectId, default: null }, // event this undoes
+    undoOf: { type: mongoose.Schema.Types.ObjectId, default: null },
   },
   { _id: true }
 );
@@ -43,6 +41,23 @@ const RoomSchema = new mongoose.Schema(
     rules: { type: RulesSchema, default: {} },
     log: { type: [EventSchema], default: [] },
     maxSeats: { type: Number, required: true, min: 4 },
+
+    presetKey: { type: String, default: null },
+    rolesConfig: { type: Object, default: {} },
+
+    meta: {
+      expectedPlayers: { type: Number, default: 0 },
+      playersNeeded: { type: Number, default: 0 },
+      phaseAllowedActors: { type: [String], default: [] },
+      mode: { type: String, default: "flex" },
+      ready: { type: Boolean, default: false },
+      readyIssues: { type: [String], default: [] },
+      minPlayers: { type: Number, default: 4 },
+      currentPlayers: { type: Number, default: 0 },
+    },
+
+    lobbyLocked: { type: Boolean, default: false },
+
     createdAt: { type: Date, default: Date.now },
   },
   { versionKey: false }

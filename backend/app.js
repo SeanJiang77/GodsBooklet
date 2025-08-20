@@ -3,6 +3,19 @@ import express from "express";
 import mongoose from "mongoose";
 import roomsRouter from "./routes/rooms.js";
 
+import { registerRole } from "./engine/registry.js";
+import { Werewolf }  from "./roles/Werewolf.js";
+import { Seer }      from "./roles/Seer.js";
+import { Witch }     from "./roles/Witch.js";
+import { Guard }     from "./roles/Guard.js";
+import { Villager }  from "./roles/Villager.js";
+
+registerRole(Werewolf);
+registerRole(Seer);
+registerRole(Witch);
+registerRole(Guard);
+registerRole(Villager);
+
 const app = express();
 app.use(express.json());
 

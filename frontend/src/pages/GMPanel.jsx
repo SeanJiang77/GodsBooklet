@@ -14,6 +14,7 @@ function Timer({ enabled }) {
 
 export default function GMPanel({ onNext }) {
   const { room, setRoom } = useRoomStore();
+  const [actorSeat, setActorSeat] = useState(1);
   const [targetSeat, setTargetSeat] = useState(1);
   const [isFirstNight, setIsFirstNight] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -24,13 +25,13 @@ export default function GMPanel({ onNext }) {
   const refresh = async () => setRoom(await getRoom(room._id));
 
   const act = async (actor, action) => {
-    setLoading(true); setError("");
-    try {
-      const payload = { actor, action, targetSeat: Number(targetSeat), isFirstNight, isSelfSave: false };
-      const updated = await step(room._id, payload);
-      setRoom(updated);
-    } catch (e) { setError(e.message); }
-    finally { setLoading(false); }
+    await step(room._id, {
+      actor,                // "seer" | "werewolf" | "witch" | "guard" | "system"
+      actorSeat: Number(actorSeat),
+      action,               // "check" | "kill" | "heal" | "protect" | "advancePhase" ...
+      targetSeat: Number(targetSeat),
+      payload: { isFirstNight },  // 角色需要的额外参数
+    });
   };
 
   const guardProtect = () => act("guard", "protect");
