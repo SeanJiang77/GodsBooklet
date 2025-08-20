@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getRoom, step } from "../api/rooms";
 import useRoomStore from "../store/roomStore";
 
@@ -35,7 +35,7 @@ export default function GMPanel({ onNext }) {
 
   const guardProtect = () => act("guard", "protect");
   const wolvesKill = () => act("werewolves", "kill");
-  const seerCheck = () => act("seer", "check"); // 后端可扩展为标记 payload
+  const seerCheck = () => act("seer", "check");
   const witchHeal = () => act("witch", "heal");
   const advance = async () => {
     setLoading(true); setError("");

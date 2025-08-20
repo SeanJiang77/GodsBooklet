@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { createRoom } from "../api/rooms";
 import useRoomStore from "../store/roomStore";
 

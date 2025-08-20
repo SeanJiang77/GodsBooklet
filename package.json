@@ -1,0 +1,13 @@
+{
+  "name": "godsbooklet",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -k -n BE,FE -c green,cyan \"npm --prefix backend run dev\" \"npm --prefix frontend run dev\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.0"
+  },
+  "dependencies": {
+    "react": "^19.1.1"
+  }
+}
