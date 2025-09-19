@@ -9,6 +9,6 @@ export class Seer extends GodRole {
     if (action !== "check") return {};
     const t = this.room.players.find(p => p.seat === targetSeat);
     const isWolf = t?.role === "werewolf";
-    return { note: `查验座位 ${targetSeat}=${isWolf ? "狼人" : "好人"}` };
+    return { note: `????? ${targetSeat}=${isWolf ? "??" : "??"}` };
   }
 }

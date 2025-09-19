@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { undo, getRoom } from "../api/rooms";
 import useRoomStore from "../store/roomStore";
 
@@ -8,7 +8,7 @@ export default function LogPanel() {
   const [error, setError] = useState("");
   const [eventId, setEventId] = useState("");
 
-  if (!room?._id) return <div className="card">请先创建房间。</div>;
+  if (!room?._id) return <div className="card">请先创建房间</div>;
 
   const refresh = async () => setRoom(await getRoom(room._id));
 
@@ -31,7 +31,7 @@ export default function LogPanel() {
 
       <div className="flex items-center gap-2">
         <input className="input" placeholder="事件ID" value={eventId} onChange={e=>setEventId(e.target.value)} />
-        <button className="btn-secondary" onClick={doUndo} disabled={loading || !eventId}>撤销所选事件</button>
+        <button className="btn-secondary" onClick={doUndo} disabled={loading || !eventId}>撤销</button>
         <button className="btn-secondary" onClick={refresh}>刷新</button>
         {error && <span className="text-red-600 text-sm">{error}</span>}
       </div>
@@ -53,7 +53,7 @@ export default function LogPanel() {
 
       {room.status === "end" && (
         <div className="p-3 bg-green-50 border border-green-200 rounded-xl">
-          本局已结束。可在此处扩展导出 JSON/PNG。
+          游戏已结束，可以导出结果（JSON/PNG）。
         </div>
       )}
     </div>

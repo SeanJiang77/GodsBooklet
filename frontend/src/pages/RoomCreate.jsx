@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { createRoom } from "../api/rooms";
 import useRoomStore from "../store/roomStore";
 
-export default function CreateRoom() {
+export default function CreateRoom({ onNext }) {
   const { setRoom } = useRoomStore();
-  const [name, setName] = useState("今晚狼人杀");
+  const [name, setName] = useState("新房间");
   const [maxSeats, setMaxSeats] = useState(12);
   const [presetKey, setPresetKey] = useState("12p-classic");
   const [mode, setMode] = useState("flex");
-  const [initialPlayers, setInitialPlayers] = useState(9); // ✅ 新增
+  const [initialPlayers, setInitialPlayers] = useState(9); // 初始玩家数
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -17,20 +17,21 @@ export default function CreateRoom() {
       maxSeats: Number(maxSeats),
       presetKey,
       mode,
-      initialPlayers: Number(initialPlayers), // ✅ 关键
+      initialPlayers: Number(initialPlayers), // 初始玩家数
     });
     setRoom(room);
+    onNext?.();
   };
 
   return (
     <form onSubmit={onSubmit} className="card space-y-3">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div>
-          <label className="label">房间名</label>
+          <label className="label">房间名称</label>
           <input className="input" value={name} onChange={e=>setName(e.target.value)} />
         </div>
         <div>
-          <label className="label">最大座位</label>
+          <label className="label">最大座位数</label>
           <input className="input" type="number" min={4} value={maxSeats}
                  onChange={e=>setMaxSeats(e.target.value)} />
         </div>
@@ -49,9 +50,9 @@ export default function CreateRoom() {
           </select>
         </div>
 
-        {/* ✅ 新增：开局就生成 N 个“空白玩家（1..N，昵称为空）” */}
+        {/* 提示：初始玩家数用于快速生成1..N玩家 */}
         <div>
-          <label className="label">房间人数（直接生成空白玩家）</label>
+          <label className="label">初始玩家数</label>
           <input className="input" type="number" min={0} max={maxSeats}
                  value={initialPlayers}
                  onChange={e=>setInitialPlayers(e.target.value)} />

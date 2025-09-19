@@ -3,23 +3,23 @@ import { HttpError } from "../utils/errors.js";
 
 export function performAction(room, { actorSeat, action, targetSeat, payload }) {
   const actor = room.players.find(p => p.seat === actorSeat);
-  if (!actor) throw new HttpError(404, `座位 ${actorSeat} 不存在`);
-  if (!actor.alive) throw new HttpError(409, `座位 ${actorSeat} 已阵亡`);
-  if (!actor.role) throw new HttpError(409, `座位 ${actorSeat} 未分配身份`);
+  if (!actor) throw new HttpError(404, `?? ${actorSeat} ???`);
+  if (!actor.alive) throw new HttpError(409, `?? ${actorSeat} ??????`);
+  if (!actor.role) throw new HttpError(409, `?? ${actorSeat} ????`);
 
   const roleInst = createRoleInstance(actor.role, { room, actor, rules: room.rules, payload });
   const RoleClass = roleInst.constructor;
 
   if (!RoleClass.allowedActions.includes(action)) {
-    throw new HttpError(400, `${actor.role} 不支持动作 ${action}`);
+    throw new HttpError(400, `${actor.role} ????? ${action}`);
   }
   if (!RoleClass.isActionPhaseOk(room.status, action)) {
-    throw new HttpError(409, `阶段(${room.status})不允许 ${actor.role} 动作 ${action}`);
+    throw new HttpError(409, `???? ${room.status} ??? ${actor.role} ???? ${action}`);
   }
 
   if (typeof targetSeat === "number") {
     const t = room.players.find(p => p.seat === targetSeat);
-    if (!t) throw new HttpError(404, `目标座位 ${targetSeat} 不存在`);
+    if (!t) throw new HttpError(404, `???? ${targetSeat} ???`);
   }
 
   roleInst.validate(action, targetSeat);

@@ -11,7 +11,7 @@ export class Witch extends GodRole {
       const isFirstNight = !!this.payload?.isFirstNight;
       const isSelfSave = this.actor.seat === targetSeat;
       if (isFirstNight && !this.rules.witchSelfSaveFirstNight && isSelfSave) {
-        throw new Error("女巫首夜禁止自救");
+        throw new Error("??????");
       }
     }
   }
@@ -21,6 +21,6 @@ export class Witch extends GodRole {
     if (!t) return {};
     if (action === "heal") t.alive = true;
     if (action === "poison") t.alive = false;
-    return { note: `女巫${action === "heal" ? "救了" : "毒了"} ${targetSeat}` };
+    return { note: `??${action === "heal" ? "??" : "??"} ${targetSeat}` };
   }
 }

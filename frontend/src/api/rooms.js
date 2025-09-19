@@ -34,3 +34,8 @@ export async function undo(id, payload) {
   const { data } = await api.post(`/rooms/${id}/undo`, payload);
   return data;
 }
+
+export async function fastNight(id, payload) {
+  const { data } = await api.post(`/rooms/${id}/night/resolve`, payload);
+  return data;
+}

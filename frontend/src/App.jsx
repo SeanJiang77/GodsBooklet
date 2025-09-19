@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import RoomCreate from "./pages/RoomCreate.jsx";
 import PlayerSetup from "./pages/PlayerSetup.jsx";
 import RoleAssign from "./pages/RoleAssign.jsx";
@@ -13,16 +13,16 @@ export default function App() {
   const tabs = [
     { key: "create", label: "创建房间" },
     { key: "players", label: "玩家设置", disabled: !room?._id },
-    { key: "assign", label: "角色分配", disabled: !room?._id },
+    { key: "assign", label: "发牌", disabled: !room?._id },
     { key: "gm", label: "主持面板", disabled: !room?._id },
-    { key: "log", label: "日志/撤销", disabled: !room?._id },
+    { key: "log", label: "日志 / 撤销", disabled: !room?._id },
   ];
 
   return (
     <div className="max-w-5xl mx-auto p-4 space-y-4">
       <header className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">GodsBooklet — 主持人面板</h1>
-        <div className="text-sm text-gray-500">{room?._id ? `房间ID：${room._id}` : "未创建房间"}</div>
+        <h1 className="text-2xl font-semibold">GodsBooklet 主持工具</h1>
+        <div className="text-sm text-gray-500">{room?._id ? `房间ID：${room._id}` : "请先创建房间"}</div>
       </header>
 
       <nav className="flex gap-2 flex-wrap">

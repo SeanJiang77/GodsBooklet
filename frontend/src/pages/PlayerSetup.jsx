@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { addPlayer, getRoom } from "../api/rooms";
 import useRoomStore from "../store/roomStore";
 
@@ -9,7 +9,7 @@ export default function PlayerSetup({ onNext }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  if (!room?._id) return <div className="card">请先创建房间。</div>;
+  if (!room?._id) return <div className="card">请先创建房间</div>;
 
   const add = async () => {
     setLoading(true); setError("");
@@ -42,7 +42,7 @@ export default function PlayerSetup({ onNext }) {
       </div>
 
       <div className="flex items-center gap-2">
-        <button className="btn-primary" onClick={add} disabled={loading || !nickname}>{loading ? "添加中…" : "添加玩家"}</button>
+        <button className="btn-primary" onClick={add} disabled={loading || !nickname}>{loading ? "添加中..." : "添加玩家"}</button>
         <button className="btn-secondary" onClick={refresh}>刷新</button>
         {error && <span className="text-red-600 text-sm">{error}</span>}
       </div>
@@ -52,15 +52,15 @@ export default function PlayerSetup({ onNext }) {
           <div key={p.seat} className="border rounded-xl p-3 flex items-center justify-between">
             <div>
               <div className="font-medium">{p.nickname}</div>
-              <div className="text-sm text-gray-500">座位 {p.seat} · {p.alive ? <span className="badge">存活</span> : <span className="badge">阵亡</span>}</div>
+              <div className="text-sm text-gray-500">座位 {p.seat} · {p.alive ? <span className="badge">存活</span> : <span className="badge">死亡</span>}</div>
             </div>
-            <div className="text-xs text-gray-400">{p.role || "未分配角色"}</div>
+            <div className="text-xs text-gray-400">{p.role || "未分配"}</div>
           </div>
         ))}
       </div>
 
       <div>
-        <button className="btn-primary" onClick={onNext} disabled={(room.players||[]).length === 0}>下一步：角色分配</button>
+        <button className="btn-primary" onClick={onNext} disabled={(room.players||[]).length === 0}>继续到发牌</button>
       </div>
     </div>
   );

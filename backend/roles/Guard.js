@@ -10,7 +10,7 @@ export class Guard extends GodRole {
     if (!this.rules.guardConsecutiveProtectAllowed) {
       const last = [...this.room.log].reverse().find(e => e.actor === "guard");
       if (last && last.targetSeat === targetSeat) {
-        throw new Error("守卫不可连续守同一人");
+        throw new Error("???????????");
       }
     }
   }
@@ -18,6 +18,6 @@ export class Guard extends GodRole {
   apply(action, targetSeat) {
     const t = this.room.players.find(p => p.seat === targetSeat);
     if (t) t._guarded = true;
-    return { note: `守护 ${targetSeat}` };
+    return { note: `???? ${targetSeat}` };
   }
 }

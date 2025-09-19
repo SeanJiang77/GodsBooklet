@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { assignRoles } from "../api/rooms";
 import useRoomStore from "../store/roomStore";
 
@@ -7,12 +7,12 @@ export default function RoleAssign({ onNext }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  if (!room?._id) return <div className="card">请先创建房间。</div>;
+  if (!room?._id) return <div className="card">请先创建房间</div>;
 
   const run = async () => {
     setLoading(true); setError("");
     try {
-      const updated = await assignRoles(room._id, {}); // 使用房间创建时选择的 preset
+      const updated = await assignRoles(room._id, {});
       setRoom(updated);
       onNext?.();
     } catch (e) { setError(e.message); }
@@ -21,11 +21,11 @@ export default function RoleAssign({ onNext }) {
 
   return (
     <div className="card space-y-4">
-      <h2 className="text-xl font-semibold">角色分配</h2>
-      <p className="text-sm text-gray-600">分配后系统进入 <b>首夜</b>。</p>
+      <h2 className="text-xl font-semibold">发牌</h2>
+      <p className="text-sm text-gray-600">将根据预设/自定义配置分配角色。<b>发牌后开始夜晚</b>。</p>
 
       <div className="flex items-center gap-2">
-        <button className="btn-primary" onClick={run} disabled={loading || (room.players||[]).length===0}>{loading?"分配中…":"随机分配"}</button>
+        <button className="btn-primary" onClick={run} disabled={loading || (room.players||[]).length===0}>{loading?"发牌中...":"开始发牌"}</button>
         {error && <span className="text-red-600 text-sm">{error}</span>}
       </div>
 
